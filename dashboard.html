@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Command Center — Pesta Siaga 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <img src="assets/logo.png" alt="Logo">
+      <div>
+        <span class="name">Pesta Siaga 2026</span>
+        <span class="tag">Digital Management System</span>
+      </div>
+    </div>
+
+    <nav>
+      <div class="nav-group">
+        <div class="nav-item active" data-nav="dashboard">🏠 Dashboard</div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">Data Master</div>
+        <div class="nav-item" data-nav="soon">🏫 Sekolah</div>
+        <div class="nav-item" data-nav="soon">🎪 Barung</div>
+        <div class="nav-item" data-nav="soon">🧒 Peserta</div>
+        <div class="nav-item" data-nav="soon">🧑‍🤝‍🧑 Pendamping</div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">Verifikasi</div>
+        <div class="nav-item" data-nav="soon">✅ Verifikasi Data</div>
+        <div class="nav-item" data-nav="soon">📄 Dokumen &amp; Bukti</div>
+        <div class="nav-item" data-nav="soon">⚠️ Perlu Tindakan</div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">Hari H</div>
+        <div class="nav-item" data-nav="soon">🔳 QR Barung</div>
+        <div class="nav-item" data-nav="soon">📝 Registrasi Hari H</div>
+        <div class="nav-item" data-nav="soon">📡 Monitoring</div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">Sistem</div>
+        <div class="nav-item" data-nav="soon">📜 Audit Log</div>
+        <div class="nav-item" data-nav="soon">⚙️ Pengaturan</div>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="dev-card">
+        <img src="assets/developer.png" alt="Edoy D Hagane">
+        <div>
+          <div class="dev-name">Edoy D Hagane</div>
+          <div class="dev-role">Developer &amp; System Architect</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <div class="topbar">
+      <div>
+        <h1 id="pageTitle">Command Center</h1>
+        <div class="sub" id="pageSub">Memuat data…</div>
+      </div>
+
+      <div class="topbar-right">
+        <span id="roleTag" class="role-select"></span>
+        <div id="avatar" class="avatar">–</div>
+        <button id="logoutBtn" class="logout-btn">Keluar</button>
+      </div>
+    </div>
+
+    <div id="statGrid" class="stat-grid"></div>
+
+    <div class="content-grid">
+      <div class="panel">
+        <h3>Status Verifikasi</h3>
+        <div class="panel-sub">Ringkasan seluruh peserta terdaftar</div>
+        <div id="donutWrap" class="donut-wrap">
+          <div class="loading-note">Memuat…</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Perlu Tindakan</h3>
+        <div class="panel-sub">Peserta yang butuh pemeriksaan manual</div>
+        <div id="actionList">
+          <div class="loading-note">Memuat…</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <div class="panel">
+        <h3>Progress Sekolah</h3>
+        <div class="panel-sub">Kelengkapan profil per sekolah</div>
+        <div id="progressList">
+          <div class="loading-note">Memuat…</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Informasi Kegiatan</h3>
+        <div class="panel-sub">Detail Pesta Siaga 2026</div>
+        <div id="eventInfo">
+          <div class="loading-note">Memuat…</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

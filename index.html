@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Pesta Siaga 2026 — Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="login-shell">
+
+  <div class="login-hero">
+    <div class="hero-top">
+      <img src="assets/logo.png" alt="Logo Pesta Siaga">
+      <span>KKMI Bondowoso</span>
+    </div>
+
+    <div class="hero-main">
+      <img class="hero-logo" src="assets/logo.png" alt="Pesta Siaga 2026">
+      <h1>Pesta Siaga 2026</h1>
+      <p>Sistem manajemen terintegrasi untuk pendaftaran peserta, verifikasi kelayakan, pembentukan barung, dan registrasi Hari H — 27 Agustus 2026, Sukosari–Sumberwringin.</p>
+
+      <div class="hero-features">
+        <span>✓ Validasi usia otomatis</span>
+        <span>✓ Verifikasi dokumen OCR</span>
+        <span>✓ QR Registrasi Barung</span>
+        <span>✓ Laporan real-time</span>
+      </div>
+    </div>
+
+    <div class="dev-card">
+      <img src="assets/developer.png" alt="Edoy D Hagane">
+      <div>
+        <div class="dev-name">Edoy D Hagane</div>
+        <div class="dev-role">Developer &amp; System Architect · DBrother</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="login-panel">
+    <div class="login-card">
+      <h2>Selamat datang kembali</h2>
+      <p class="sub">Masuk menggunakan akun panitia atau operator sekolah.</p>
+
+      <div id="errorBox" class="error-box"></div>
+
+      <form id="loginForm">
+        <div class="field">
+          <label for="username">Username</label>
+          <input id="username" type="text" autocomplete="username" required placeholder="mis. sekolah01">
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" type="password" autocomplete="current-password" required placeholder="••••••••">
+        </div>
+
+        <button id="submitBtn" type="submit" class="btn-primary">Masuk ke Sistem</button>
+      </form>
+
+      <div class="hint-box">
+        <b>Akun demo (Fase 1 seed):</b>
+        Panitia — pj / ketua / sekretaris · password: siaga2026<br>
+        Sekolah — sekolah01 … sekolah12 · password: sekolah123
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>
