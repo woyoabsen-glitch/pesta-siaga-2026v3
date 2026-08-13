@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Kelola Data — Pesta Siaga 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <img src="assets/logo.png" alt="Logo">
+      <div>
+        <span class="name">Pesta Siaga 2026</span>
+        <span class="tag">Digital Management System</span>
+      </div>
+    </div>
+
+    <nav>
+      <div class="nav-group">
+        <div class="nav-item" data-href="dashboard.html">🏠 Dashboard</div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">Data Master</div>
+        <div class="nav-item active" data-href="kelola.html">🏫 Kelola Data Sekolah</div>
+      </div>
+
+      <div class="nav-group" id="navPanitiaOnly" style="display:none">
+        <div class="nav-group-label">Verifikasi</div>
+        <div class="nav-item" data-href="verifikasi.html">✅ Verifikasi Data</div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">Hari H</div>
+        <div class="nav-item" data-nav="soon">🔳 QR Barung</div>
+        <div class="nav-item" data-nav="soon">📝 Registrasi Hari H</div>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="dev-card">
+        <img src="assets/developer.png" alt="Edoy D Hagane">
+        <div>
+          <div class="dev-name">Edoy D Hagane</div>
+          <div class="dev-role">Developer &amp; System Architect</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <div class="topbar">
+      <div>
+        <h1>Kelola Data Sekolah</h1>
+        <div class="sub" id="pageSub">Memuat…</div>
+      </div>
+      <div class="topbar-right">
+        <select id="sekolahSelect" class="role-select" style="display:none"></select>
+        <span id="roleTag" class="role-select"></span>
+        <div id="avatar" class="avatar">–</div>
+        <button id="logoutBtn" class="logout-btn">Keluar</button>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="profil">Profil Sekolah</button>
+      <button class="tab-btn" data-tab="barung">Barung</button>
+      <button class="tab-btn" data-tab="pendamping">Pendamping</button>
+      <button class="tab-btn" data-tab="peserta">Peserta</button>
+    </div>
+
+    <div class="panel">
+
+      <div id="tabProfil" class="tab-panel active">
+        <div class="card-row">
+          <div><h2>Profil Sekolah</h2><div class="sub">Nama, kecamatan, dan alamat sekolah</div></div>
+        </div>
+        <form id="formProfil" class="form-grid">
+          <div><label>Nama Sekolah</label><input id="fNamaSekolah" required></div>
+          <div><label>Kecamatan</label><input id="fKecamatan" required></div>
+          <div class="field-full"><label>Alamat Lengkap</label><input id="fAlamat" required></div>
+          <div class="field-full"><button type="submit" class="btn-primary" style="width:auto;padding:11px 22px">Simpan Profil</button></div>
+        </form>
+      </div>
+
+      <div id="tabBarung" class="tab-panel">
+        <div class="card-row">
+          <div><h2>Barung</h2><div class="sub">Satu sekolah memiliki satu barung</div></div>
+        </div>
+        <div id="barungContent"><div class="loading-note">Memuat…</div></div>
+      </div>
+
+      <div id="tabPendamping" class="tab-panel">
+        <div class="card-row">
+          <div><h2>Ketua Barung &amp; Pendamping</h2><div class="sub">1 Ketua Barung + 2 Pendamping, tidak login</div></div>
+        </div>
+        <div id="pendampingContent" class="pendamping-grid"><div class="loading-note">Memuat…</div></div>
+      </div>
+
+      <div id="tabPeserta" class="tab-panel">
+        <div class="card-row">
+          <div><h2>Daftar Peserta</h2><div class="sub">Usia dihitung otomatis pada tanggal kegiatan</div></div>
+          <button id="btnTambahPeserta" class="btn-primary" style="width:auto;padding:10px 18px">+ Tambah Peserta</button>
+        </div>
+        <div id="pesertaContent"><div class="loading-note">Memuat…</div></div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<div id="modalRoot"></div>
+
+<script src="js/api.js"></script>
+<script src="js/kelola.js"></script>
+</body>
+</html>
