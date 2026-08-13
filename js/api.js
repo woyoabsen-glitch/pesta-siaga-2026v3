@@ -122,3 +122,29 @@ const STATUS_COLOR = {
   NEED_CORRECTION: '#f97316',
   NOT_ELIGIBLE: '#dc2626'
 };
+
+const PANITIA_ROLES_FE = ['PenanggungJawab', 'Ketua', 'Sekretaris'];
+
+const WARNA_BARUNG_OPTIONS = [
+  'Merah', 'Kuning', 'Hijau', 'Biru', 'Oranye', 'Ungu', 'Merah Muda', 'Cokelat'
+];
+
+function fileToBase64(file) {
+  return new Promise(function (resolve, reject) {
+    const reader = new FileReader();
+    reader.onload = function () {
+      const result = reader.result; // format: data:mime;base64,XXXX
+      resolve(result.split(',')[1]);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function formatTanggalPendek(tgl) {
+  try {
+    return new Date(tgl).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+  } catch (e) {
+    return tgl || '-';
+  }
+}
