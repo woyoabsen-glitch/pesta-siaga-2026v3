@@ -1,5 +1,3 @@
-const PANITIA_ROLES_FE = ['PenanggungJawab', 'Ketua', 'Sekretaris'];
-
 (async function () {
 
   const user = requireLoginOrRedirect();
@@ -43,7 +41,14 @@ function attachNavPlaceholders() {
   document.querySelectorAll('[data-nav="soon"]').forEach(function (el) {
 
     el.addEventListener('click', function () {
-      alert('Halaman ini menyusul di fase pengembangan berikutnya (Fase 3–5).');
+      alert('Halaman ini menyusul di fase pengembangan berikutnya (Fase 3 & 6).');
+    });
+  });
+
+  document.querySelectorAll('[data-href]').forEach(function (el) {
+
+    el.addEventListener('click', function () {
+      window.location.href = el.dataset.href;
     });
   });
 }
