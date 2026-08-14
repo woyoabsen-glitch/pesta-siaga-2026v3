@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Laporan — Pesta Siaga 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  @media print {
+    .sidebar, .topbar, .no-print { display: none !important; }
+    .app-shell { display: block !important; }
+    .main { padding: 0 !important; }
+  }
+  .print-head { display: none; }
+  @media print { .print-head { display: block; margin-bottom: 18px; } }
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <img src="assets/logo.png" alt="Logo">
+      <div><span class="name">Pesta Siaga 2026</span><span class="tag">Digital Management System</span></div>
+    </div>
+    <nav>
+      <div class="nav-group"><div class="nav-item" data-href="dashboard.html">🏠 Dashboard</div></div>
+      <div class="nav-group">
+        <div class="nav-group-label">Data Master</div>
+        <div class="nav-item" data-href="kelola.html">🏫 Kelola Data Sekolah</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Verifikasi</div>
+        <div class="nav-item" data-href="verifikasi.html">✅ Verifikasi Data</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Hari H</div>
+        <div class="nav-item" data-href="qr-barung.html">🔳 QR Barung</div>
+        <div class="nav-item" data-href="registrasi.html">📝 Registrasi Hari H</div>
+        <div class="nav-item" data-href="monitoring.html">📡 Monitoring</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Laporan</div>
+        <div class="nav-item active" data-href="laporan.html">📊 Laporan &amp; Rekap</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Sistem</div>
+        <div class="nav-item" data-href="audit-log.html">📜 Audit Log</div>
+        <div class="nav-item" data-href="pengaturan.html">⚙️ Pengaturan</div>
+        <div class="nav-item" data-href="tentang.html">ℹ️ Tentang</div>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="dev-card">
+        <img src="assets/developer.png" alt="Edoy D Hagane">
+        <div><div class="dev-name">Edoy D Hagane</div><div class="dev-role">Developer &amp; System Architect</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <div class="print-head">
+      <h1 style="font-size:20px">Laporan Rekap — Pesta Siaga 2026</h1>
+      <div style="font-size:12px;color:#666">Dicetak pada <span id="printDate"></span></div>
+    </div>
+
+    <div class="topbar">
+      <div>
+        <h1>Laporan &amp; Rekap</h1>
+        <div class="sub" id="pageSub">Memuat…</div>
+      </div>
+      <div class="topbar-right no-print">
+        <button id="exportCsvBtn" class="btn-secondary">⬇️ Export CSV</button>
+        <button id="printBtn" class="btn-secondary">🖨️ Cetak</button>
+        <span id="roleTag" class="role-select"></span>
+        <div id="avatar" class="avatar">–</div>
+        <button id="logoutBtn" class="logout-btn">Keluar</button>
+      </div>
+    </div>
+
+    <div class="stat-grid" id="summaryGrid"></div>
+
+    <div class="panel" style="margin-bottom:18px">
+      <h3>Rekap per Sekolah</h3>
+      <div class="panel-sub">Kelengkapan, jumlah peserta, dan status verifikasi tiap sekolah</div>
+      <div id="rekapSekolah"><div class="loading-note">Memuat…</div></div>
+    </div>
+
+    <div class="panel">
+      <div class="card-row">
+        <div><h3 style="margin:0">Data Peserta Lengkap</h3><div class="panel-sub" style="margin:2px 0 0">Seluruh 12 sekolah</div></div>
+      </div>
+      <div id="pesertaDetail"><div class="loading-note">Memuat…</div></div>
+    </div>
+
+  </main>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/laporan.js"></script>
+</body>
+</html>

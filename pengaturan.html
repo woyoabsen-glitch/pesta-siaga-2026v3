@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Pengaturan — Pesta Siaga 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <img src="assets/logo.png" alt="Logo">
+      <div><span class="name">Pesta Siaga 2026</span><span class="tag">Digital Management System</span></div>
+    </div>
+    <nav>
+      <div class="nav-group"><div class="nav-item" data-href="dashboard.html">🏠 Dashboard</div></div>
+      <div class="nav-group">
+        <div class="nav-group-label">Data Master</div>
+        <div class="nav-item" data-href="kelola.html">🏫 Kelola Data Sekolah</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Verifikasi</div>
+        <div class="nav-item" data-href="verifikasi.html">✅ Verifikasi Data</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Hari H</div>
+        <div class="nav-item" data-href="qr-barung.html">🔳 QR Barung</div>
+        <div class="nav-item" data-href="registrasi.html">📝 Registrasi Hari H</div>
+        <div class="nav-item" data-href="monitoring.html">📡 Monitoring</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Laporan</div>
+        <div class="nav-item" data-href="laporan.html">📊 Laporan &amp; Rekap</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Sistem</div>
+        <div class="nav-item" data-href="audit-log.html">📜 Audit Log</div>
+        <div class="nav-item active" data-href="pengaturan.html">⚙️ Pengaturan</div>
+        <div class="nav-item" data-href="tentang.html">ℹ️ Tentang</div>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="dev-card">
+        <img src="assets/developer.png" alt="Edoy D Hagane">
+        <div><div class="dev-name">Edoy D Hagane</div><div class="dev-role">Developer &amp; System Architect</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <div class="topbar">
+      <div>
+        <h1>Pengaturan</h1>
+        <div class="sub" id="pageSub">Memuat…</div>
+      </div>
+      <div class="topbar-right">
+        <span id="roleTag" class="role-select"></span>
+        <div id="avatar" class="avatar">–</div>
+        <button id="logoutBtn" class="logout-btn">Keluar</button>
+      </div>
+    </div>
+
+    <div class="content-grid">
+
+      <div class="panel">
+        <h3>Informasi Kegiatan</h3>
+        <div class="panel-sub">Tanggal &amp; aturan usia — hanya Penanggung Jawab &amp; Ketua</div>
+        <form id="formEvent" class="form-grid">
+          <div class="field-full"><label>Nama Kegiatan</label><input id="eNama" required></div>
+          <div><label>Tanggal Kegiatan</label><input id="eTanggal" type="date" required></div>
+          <div><label>Status</label>
+            <select id="eStatus"><option value="Aktif">Aktif</option><option value="Selesai">Selesai</option></select>
+          </div>
+          <div class="field-full"><label>Lokasi</label><input id="eLokasi" required></div>
+          <div><label>Usia Minimum (tahun)</label><input id="eUsiaMin" type="number" min="1" required></div>
+          <div><label>Usia Maksimum (tahun, eksklusif)</label><input id="eUsiaMaks" type="number" min="1" required></div>
+          <div class="field-full"><button type="submit" class="btn-primary" style="width:auto;padding:11px 22px">Simpan Info Kegiatan</button></div>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h3>Identitas Aplikasi</h3>
+        <div class="panel-sub">Nama, penyelenggara, tagline — hanya Penanggung Jawab</div>
+        <form id="formSettings" class="form-grid single">
+          <div><label>Nama Aplikasi</label><input id="sNama" required></div>
+          <div><label>Penyelenggara</label><input id="sPenyelenggara" required></div>
+          <div><label>Tagline</label><input id="sTagline" required></div>
+          <div><button type="submit" class="btn-primary" style="width:auto;padding:11px 22px">Simpan Identitas</button></div>
+        </form>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/pengaturan.js"></script>
+</body>
+</html>

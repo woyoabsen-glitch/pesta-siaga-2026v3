@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Audit Log — Pesta Siaga 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <img src="assets/logo.png" alt="Logo">
+      <div><span class="name">Pesta Siaga 2026</span><span class="tag">Digital Management System</span></div>
+    </div>
+    <nav>
+      <div class="nav-group"><div class="nav-item" data-href="dashboard.html">🏠 Dashboard</div></div>
+      <div class="nav-group">
+        <div class="nav-group-label">Data Master</div>
+        <div class="nav-item" data-href="kelola.html">🏫 Kelola Data Sekolah</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Verifikasi</div>
+        <div class="nav-item" data-href="verifikasi.html">✅ Verifikasi Data</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Hari H</div>
+        <div class="nav-item" data-href="qr-barung.html">🔳 QR Barung</div>
+        <div class="nav-item" data-href="registrasi.html">📝 Registrasi Hari H</div>
+        <div class="nav-item" data-href="monitoring.html">📡 Monitoring</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Laporan</div>
+        <div class="nav-item" data-href="laporan.html">📊 Laporan &amp; Rekap</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Sistem</div>
+        <div class="nav-item active" data-href="audit-log.html">📜 Audit Log</div>
+        <div class="nav-item" data-href="pengaturan.html">⚙️ Pengaturan</div>
+        <div class="nav-item" data-href="tentang.html">ℹ️ Tentang</div>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="dev-card">
+        <img src="assets/developer.png" alt="Edoy D Hagane">
+        <div><div class="dev-name">Edoy D Hagane</div><div class="dev-role">Developer &amp; System Architect</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <div class="topbar">
+      <div>
+        <h1>Audit Log</h1>
+        <div class="sub" id="pageSub">Memuat…</div>
+      </div>
+      <div class="topbar-right">
+        <input id="searchBox" placeholder="Cari nama, aksi, atau detail…" style="padding:9px 14px;border-radius:8px;border:1.5px solid var(--line);font-size:13px;min-width:220px">
+        <span id="roleTag" class="role-select"></span>
+        <div id="avatar" class="avatar">–</div>
+        <button id="logoutBtn" class="logout-btn">Keluar</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div id="logTable"><div class="loading-note">Memuat…</div></div>
+    </div>
+
+  </main>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/auditlog.js"></script>
+</body>
+</html>
