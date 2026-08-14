@@ -16,12 +16,12 @@
     el.addEventListener('click', function () { window.location.href = el.dataset.href; });
   });
 
-  // Info kegiatan: hanya PenanggungJawab & Ketua boleh simpan (dibatasi backend juga)
-  const boleeditEvent = user.role === 'PenanggungJawab' || user.role === 'Ketua';
+  // Info kegiatan: SuperAdmin, PenanggungJawab & Ketua boleh simpan (dibatasi backend juga)
+  const boleeditEvent = ['SuperAdmin', 'PenanggungJawab', 'Ketua'].indexOf(user.role) > -1;
   toggleFormDisabled('formEvent', !boleeditEvent);
 
-  // Identitas aplikasi: hanya PenanggungJawab (dibatasi backend juga)
-  const bolehEditSettings = user.role === 'PenanggungJawab';
+  // Identitas aplikasi: SuperAdmin & PenanggungJawab (dibatasi backend juga)
+  const bolehEditSettings = ['SuperAdmin', 'PenanggungJawab'].indexOf(user.role) > -1;
   toggleFormDisabled('formSettings', !bolehEditSettings);
 
   document.getElementById('formEvent').addEventListener('submit', onSaveEvent);
