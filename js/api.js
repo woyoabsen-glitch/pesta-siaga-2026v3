@@ -128,7 +128,7 @@ const PANITIA_ROLES_FE = ['SuperAdmin', 'PenanggungJawab', 'Ketua', 'Sekretaris'
 
 const WARNA_BARUNG_OPTIONS = [
   'Merah', 'Hijau', 'Abu-abu', 'Jingga', 'Coklat', 'Kuning',
-  'Pink Lady', 'Ungu', 'Putih', 'Biru', 'Cappucino'
+  'Pink Lady', 'Ungu', 'Putih', 'Biru', 'Cappucino', 'Hitam'
 ];
 
 const WARNA_BARUNG_HEX = {
@@ -142,7 +142,8 @@ const WARNA_BARUNG_HEX = {
   'Ungu': '#7c3aed',
   'Putih': '#f8fafc',
   'Biru': '#2563eb',
-  'Cappucino': '#b08968'
+  'Cappucino': '#b08968',
+  'Hitam': '#18181b'
 };
 
 function warnaTeksKontras(hex) {
