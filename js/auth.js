@@ -6,6 +6,14 @@
     return;
   }
 
+  const forgotLink = document.getElementById('forgotLink');
+  if (forgotLink) {
+    forgotLink.addEventListener('click', function (e) {
+      e.preventDefault();
+      alert('Fitur reset password mandiri belum tersedia. Hubungi Penanggung Jawab untuk reset password akun Anda.');
+    });
+  }
+
   const form = document.getElementById('loginForm');
   const errorBox = document.getElementById('errorBox');
   const submitBtn = document.getElementById('submitBtn');
