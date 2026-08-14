@@ -101,6 +101,7 @@ function requireLoginOrRedirect(allowedRoles) {
 }
 
 const ROLE_LABEL = {
+  SuperAdmin: 'Super Admin',
   PenanggungJawab: 'Penanggung Jawab',
   Ketua: 'Ketua',
   Sekretaris: 'Sekretaris',
@@ -123,11 +124,37 @@ const STATUS_COLOR = {
   NOT_ELIGIBLE: '#dc2626'
 };
 
-const PANITIA_ROLES_FE = ['PenanggungJawab', 'Ketua', 'Sekretaris'];
+const PANITIA_ROLES_FE = ['SuperAdmin', 'PenanggungJawab', 'Ketua', 'Sekretaris'];
 
 const WARNA_BARUNG_OPTIONS = [
-  'Merah', 'Kuning', 'Hijau', 'Biru', 'Oranye', 'Ungu', 'Merah Muda', 'Cokelat'
+  'Merah', 'Hijau', 'Abu-abu', 'Jingga', 'Coklat', 'Kuning',
+  'Pink Lady', 'Ungu', 'Putih', 'Biru', 'Cappucino'
 ];
+
+const WARNA_BARUNG_HEX = {
+  'Merah': '#dc2626',
+  'Hijau': '#16a34a',
+  'Abu-abu': '#6b7280',
+  'Jingga': '#f97316',
+  'Coklat': '#7c4a1e',
+  'Kuning': '#eab308',
+  'Pink Lady': '#ec4899',
+  'Ungu': '#7c3aed',
+  'Putih': '#f8fafc',
+  'Biru': '#2563eb',
+  'Cappucino': '#b08968'
+};
+
+function warnaTeksKontras(hex) {
+  // Putih & Kuning perlu teks gelap supaya tetap terbaca, sisanya teks putih.
+  const terang = ['Putih', 'Kuning'];
+  return terang.indexOf(Object.keys(WARNA_BARUNG_HEX).find(function (k) { return WARNA_BARUNG_HEX[k] === hex; })) > -1
+    ? '#14261f' : '#ffffff';
+}
+
+const JABATAN_OPTIONS = ['Pinrung', 'Wapinrung', 'Anggota'];
+const JABATAN_LABEL = { Pinrung: 'Pinrung (Pemimpin Barung)', Wapinrung: 'Wapinrung (Wakil Pemimpin)', Anggota: 'Anggota' };
+const JABATAN_ORDER = { Pinrung: 0, Wapinrung: 1, Anggota: 2 };
 
 function fileToBase64(file) {
   return new Promise(function (resolve, reject) {
