@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Dokumen Arsip — Pesta Siaga 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  @media print {
+    .sidebar, .topbar, .no-print, .hamburger-btn, .sidebar-backdrop { display: none !important; }
+    .app-shell { display: block !important; }
+    .main { padding: 0 !important; }
+    .report-page { page-break-after: always; }
+    .barung-block { page-break-inside: avoid; }
+  }
+
+  .report-cover {
+    min-height: 90vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 40px; border: 2px solid var(--teal-700); border-radius: var(--radius-lg);
+    background: linear-gradient(180deg, var(--teal-100), var(--white) 60%);
+  }
+  .report-cover img.cover-logo { width: 140px; margin-bottom: 24px; }
+  .report-cover h1 { font-size: 36px; color: var(--forest-900); margin-bottom: 6px; }
+  .report-cover .cover-sub { font-size: 15px; color: var(--ink-600); margin-bottom: 28px; }
+  .report-cover .cover-doctype {
+    font-size: 14px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    background: var(--teal-700); color: var(--white); padding: 8px 20px; border-radius: 999px; margin-bottom: 18px;
+  }
+  .report-cover .cover-target { font-size: 22px; font-weight: 700; color: var(--forest-800); margin-bottom: 30px; }
+  .report-cover table { font-size: 13px; color: var(--ink-600); border-collapse: collapse; }
+  .report-cover table td { padding: 4px 12px; text-align: left; }
+  .report-cover .cover-footer { margin-top: 40px; font-size: 11.5px; color: var(--ink-400); }
+
+  .sekolah-section { margin-bottom: 30px; }
+  .sekolah-section h2 {
+    font-size: 19px; color: var(--forest-900); border-bottom: 2.5px solid var(--teal-700);
+    padding-bottom: 8px; margin-bottom: 4px;
+  }
+  .sekolah-section .sekolah-meta { font-size: 12.5px; color: var(--ink-600); margin-bottom: 16px; }
+
+  .barung-block { border: 1.5px solid var(--line); border-radius: var(--radius-md); overflow: hidden; margin-bottom: 16px; }
+  .barung-block .bb-head { padding: 10px 16px; font-weight: 700; font-size: 14px; }
+  .barung-block table { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+  .barung-block th {
+    text-align: left; background: var(--cream); padding: 7px 10px; font-size: 10.5px;
+    text-transform: uppercase; letter-spacing: 0.03em; color: var(--ink-600);
+  }
+  .barung-block td { padding: 7px 10px; border-top: 1px solid var(--line); vertical-align: middle; }
+  .doc-photo { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; display: block; }
+  .doc-photo-empty { width: 30px; height: 30px; border-radius: 50%; background: var(--line); display: block; }
+  .group-label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--teal-700); padding: 8px 10px 2px; }
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <img src="assets/logo.png" alt="Logo">
+      <div><span class="name">Pesta Siaga 2026</span><span class="tag">Digital Management System</span></div>
+    </div>
+    <nav>
+      <div class="nav-group"><div class="nav-item" data-href="dashboard.html">🏠 Dashboard</div></div>
+      <div class="nav-group">
+        <div class="nav-group-label">Data Master</div>
+        <div class="nav-item" data-href="kelola.html">🏫 Kelola Data Sekolah</div>
+        <div class="nav-item active" data-href="dokumen.html">📁 Dokumen Arsip</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Verifikasi</div>
+        <div class="nav-item" data-href="verifikasi.html" data-roles="SuperAdmin,PenanggungJawab,Ketua,Sekretaris">✅ Verifikasi Data</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Hari H</div>
+        <div class="nav-item" data-href="qr-barung.html" data-roles="SuperAdmin,PenanggungJawab,Ketua,Sekretaris">🔳 QR Barung</div>
+        <div class="nav-item" data-href="registrasi.html" data-roles="SuperAdmin,PenanggungJawab,Ketua,Sekretaris">📝 Registrasi Hari H</div>
+        <div class="nav-item" data-href="monitoring.html" data-roles="SuperAdmin,PenanggungJawab,Ketua,Sekretaris">📡 Monitoring</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Laporan</div>
+        <div class="nav-item" data-href="laporan.html" data-roles="SuperAdmin,PenanggungJawab,Ketua,Sekretaris">📊 Laporan &amp; Rekap</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Sistem</div>
+        <div class="nav-item" data-href="audit-log.html" data-roles="SuperAdmin,PenanggungJawab,Ketua,Sekretaris">📜 Audit Log</div>
+        <div class="nav-item" data-href="pengaturan.html" data-roles="SuperAdmin,PenanggungJawab,Ketua,Sekretaris">⚙️ Pengaturan</div>
+        <div class="nav-item" data-href="tentang.html">ℹ️ Tentang</div>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="dev-card">
+        <img src="assets/developer.png" alt="Edoy D Hagane">
+        <div><div class="dev-name">Edoy D Hagane</div><div class="dev-role">Developer &amp; System Architect</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <div class="topbar no-print">
+      <div>
+        <h1>Dokumen Arsip</h1>
+        <div class="sub" id="pageSub">Memuat…</div>
+      </div>
+      <div class="topbar-right">
+        <select id="sekolahSelect" class="role-select" style="display:none"></select>
+        <button id="btnUnduhSemua" class="btn-secondary" style="display:none">📦 Unduh Semua Sekolah</button>
+        <button id="printBtn" class="btn-primary" style="width:auto;padding:10px 18px">⬇️ Unduh PDF</button>
+        <span id="roleTag" class="role-select"></span>
+        <div id="avatar" class="avatar">–</div>
+        <button id="logoutBtn" class="logout-btn">Keluar</button>
+      </div>
+    </div>
+
+    <div id="reportRoot"><div class="loading-note">Memuat data…</div></div>
+
+  </main>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/dokumen.js"></script>
+</body>
+</html>
