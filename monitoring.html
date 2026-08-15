@@ -2,11 +2,20 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Monitoring — Pesta Siaga 2026</title>
+<title>Laporan — Pesta Siaga 2026</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<style>
+  @media print {
+    .sidebar, .topbar, .no-print { display: none !important; }
+    .app-shell { display: block !important; }
+    .main { padding: 0 !important; }
+  }
+  .print-head { display: none; }
+  @media print { .print-head { display: block; margin-bottom: 18px; } }
+</style>
 </head>
 <body>
 
@@ -31,11 +40,11 @@
         <div class="nav-group-label">Hari H</div>
         <div class="nav-item" data-href="qr-barung.html" data-roles="SuperAdmin,PenanggungJawab,Ketua,Sekretaris">🔳 QR Barung</div>
         <div class="nav-item" data-href="registrasi.html" data-roles="SuperAdmin,PenanggungJawab,Ketua,Sekretaris">📝 Registrasi Hari H</div>
-        <div class="nav-item active" data-href="monitoring.html" data-roles="SuperAdmin,PenanggungJawab,Ketua,Sekretaris">📡 Monitoring</div>
+        <div class="nav-item" data-href="monitoring.html" data-roles="SuperAdmin,PenanggungJawab,Ketua,Sekretaris">📡 Monitoring</div>
       </div>
       <div class="nav-group">
         <div class="nav-group-label">Laporan</div>
-        <div class="nav-item" data-href="laporan.html" data-roles="SuperAdmin,PenanggungJawab,Ketua,Sekretaris">📊 Laporan &amp; Rekap</div>
+        <div class="nav-item active" data-href="laporan.html" data-roles="SuperAdmin,PenanggungJawab,Ketua,Sekretaris">📊 Laporan &amp; Rekap</div>
       </div>
       <div class="nav-group">
         <div class="nav-group-label">Sistem</div>
@@ -53,25 +62,45 @@
   </aside>
 
   <main class="main">
+
+    <div class="print-head">
+      <h1 style="font-size:20px">Laporan Rekap — Pesta Siaga 2026</h1>
+      <div style="font-size:12px;color:#666">Dicetak pada <span id="printDate"></span></div>
+    </div>
+
     <div class="topbar">
-      <div><h1>Monitoring Hari H</h1><div class="sub" id="pageSub">Memuat…</div></div>
-      <div class="topbar-right">
-        <button id="btnRefresh" class="btn-secondary">🔄 Refresh</button>
+      <div>
+        <h1>Laporan &amp; Rekap</h1>
+        <div class="sub" id="pageSub">Memuat…</div>
+      </div>
+      <div class="topbar-right no-print">
+        <button id="exportCsvBtn" class="btn-secondary">⬇️ Export CSV</button>
+        <button id="printBtn" class="btn-secondary">🖨️ Cetak</button>
         <span id="roleTag" class="role-select"></span>
         <div id="avatar" class="avatar">–</div>
         <button id="logoutBtn" class="logout-btn">Keluar</button>
       </div>
     </div>
 
-    <div class="stat-grid" id="statGrid"></div>
+    <div class="stat-grid" id="summaryGrid"></div>
+
+    <div class="panel" style="margin-bottom:18px">
+      <h3>Rekap per Sekolah</h3>
+      <div class="panel-sub">Kelengkapan, jumlah peserta, dan status verifikasi tiap sekolah</div>
+      <div id="rekapSekolah"><div class="loading-note">Memuat…</div></div>
+    </div>
 
     <div class="panel">
-      <div id="content"><div class="loading-note">Memuat…</div></div>
+      <div class="card-row">
+        <div><h3 style="margin:0">Data Peserta Lengkap</h3><div class="panel-sub" style="margin:2px 0 0">Seluruh 12 sekolah</div></div>
+      </div>
+      <div id="pesertaDetail"><div class="loading-note">Memuat…</div></div>
     </div>
+
   </main>
 </div>
 
 <script src="js/api.js"></script>
-<script src="js/monitoring.js"></script>
+<script src="js/laporan.js"></script>
 </body>
 </html>
