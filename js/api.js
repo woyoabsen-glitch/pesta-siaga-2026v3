@@ -97,7 +97,71 @@ function requireLoginOrRedirect(allowedRoles) {
     return null;
   }
 
+  applyRoleBasedNav(user);
+  initMobileNav();
+
   return user;
+}
+
+/**
+ * Sembunyikan item sidebar yang tidak relevan untuk role yang sedang login.
+ * Item yang ingin dibatasi cukup diberi atribut data-roles="Role1,Role2" di HTML.
+ * Item tanpa atribut data-roles selalu tampil untuk semua role.
+ */
+function applyRoleBasedNav(user) {
+
+  document.querySelectorAll('.nav-item[data-roles]').forEach(function (el) {
+
+    const allowedRoles = el.getAttribute('data-roles').split(',');
+
+    if (allowedRoles.indexOf(user.role) === -1) {
+      el.style.display = 'none';
+    }
+  });
+}
+
+/**
+ * Sidebar di mobile jadi off-canvas (tombol hamburger buka/tutup),
+ * bukan nempel penuh layar menutupi konten seperti sebelumnya.
+ */
+function initMobileNav() {
+
+  const sidebar = document.querySelector('.sidebar');
+  const topbar = document.querySelector('.topbar');
+
+  if (!sidebar || !topbar || document.querySelector('.hamburger-btn')) {
+    return;
+  }
+
+  const btn = document.createElement('button');
+  btn.className = 'hamburger-btn';
+  btn.innerHTML = '☰';
+  btn.setAttribute('aria-label', 'Buka menu');
+  topbar.insertBefore(btn, topbar.firstChild);
+
+  const backdrop = document.createElement('div');
+  backdrop.className = 'sidebar-backdrop';
+  document.body.appendChild(backdrop);
+
+  function closeNav() {
+    sidebar.classList.remove('open');
+    backdrop.classList.remove('show');
+  }
+
+  function openNav() {
+    sidebar.classList.add('open');
+    backdrop.classList.add('show');
+  }
+
+  btn.addEventListener('click', function () {
+    sidebar.classList.contains('open') ? closeNav() : openNav();
+  });
+
+  backdrop.addEventListener('click', closeNav);
+
+  sidebar.querySelectorAll('.nav-item').forEach(function (el) {
+    el.addEventListener('click', closeNav);
+  });
 }
 
 const ROLE_LABEL = {
