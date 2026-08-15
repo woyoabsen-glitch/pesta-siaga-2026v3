@@ -214,7 +214,37 @@ button { font-family: var(--font-body); cursor: pointer; }
 
 .app-shell { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
 
-@media (max-width: 960px) { .app-shell { grid-template-columns: 1fr; } .sidebar { display: none; } }
+@media (max-width: 960px) {
+
+  .app-shell { display: block; }
+
+  .sidebar {
+    position: fixed; top: 0; left: 0; height: 100vh; width: 268px; max-width: 82vw;
+    z-index: 300; transform: translateX(-100%); transition: transform 0.25s ease;
+    box-shadow: 0 0 40px rgba(0,0,0,0.35);
+  }
+
+  .sidebar.open { transform: translateX(0); }
+
+  .sidebar-backdrop {
+    position: fixed; inset: 0; background: rgba(6,20,17,0.5); z-index: 290;
+    display: none;
+  }
+  .sidebar-backdrop.show { display: block; }
+
+  .main { padding: 16px 16px 60px; }
+
+  .topbar { justify-content: flex-start; }
+
+  .hamburger-btn { display: inline-flex !important; }
+}
+
+.hamburger-btn {
+  display: none; align-items: center; justify-content: center;
+  width: 38px; height: 38px; border-radius: var(--radius-sm);
+  border: 1.5px solid var(--line); background: var(--white); font-size: 17px;
+  flex-shrink: 0; margin-right: 4px;
+}
 
 .sidebar {
   background: linear-gradient(185deg, var(--forest-900), var(--forest-800));
