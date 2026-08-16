@@ -62,7 +62,7 @@ async function loadPanitiaView() {
   document.getElementById('pageTitle').textContent = 'Command Center';
   document.getElementById('pageSub').textContent = 'Dashboard Panitia Pesta Siaga 2026';
 
-  const [summary, perluTindakan, sekolahList, barungList, pesertaList, pendampingList, event] =
+  const [summary, perluTindakan, sekolahList, barungList, pesertaList, pendampingList, event, documentsList] =
     await Promise.all([
       callApi('getDashboardSummary', []),
       callApi('getPesertaPerluTindakan', []),
@@ -70,7 +70,8 @@ async function loadPanitiaView() {
       callApi('getBarungList', [null]),
       callApi('getPesertaList', [{}]),
       callApi('getPendampingList', [null]),
-      callApi('getEventInfo', [])
+      callApi('getEventInfo', []),
+      callApi('getAllDocuments', [])
     ]);
 
   renderStatGrid([
@@ -84,7 +85,7 @@ async function loadPanitiaView() {
 
   renderDonut(summary.statusVerifikasi, summary.totalPeserta);
   renderActionList(perluTindakan);
-  renderProgressSekolah(sekolahList, barungList, pesertaList, pendampingList);
+  renderProgressSekolah(sekolahList, barungList, pesertaList, pendampingList, documentsList);
   renderEventInfo(event, summary);
 }
 
@@ -274,7 +275,59 @@ function renderActionList(list) {
   }).join('');
 }
 
-function renderProgressSekolah(sekolahList, barungList, pesertaList, pendampingList) {
+/**
+ * Target kelengkapan per sekolah (sesuai ketentuan Pesta Siaga 2026):
+ * - 2 barung (Putra + Putri)
+ * - tiap barung: 2 pendamping (masing-masing wajib ada foto)
+ * - tiap barung: 8 peserta (masing-masing wajib ada foto + minimal 1 dokumen KK/Akta)
+ *
+ * Poin per barung = 2 (slot pendamping) + 24 (8 peserta x 3 syarat: ada/foto/dokumen) = 26
+ * Total maksimum per sekolah = 2 (existensi 2 barung) + 26 x 2 = 54 poin.
+ * Slot yang tidak terisi otomatis menyumbang 0 -> persentase tidak akan 100% kalau ada yang kurang.
+ */
+function hitungProgressSekolah(sekolah, barungList, pendampingList, pesertaList, documentsList) {
+
+  const barungSekolah = barungList.filter(function (b) { return String(b.SekolahID) === String(sekolah.ID); });
+  const barungPutra = barungSekolah.find(function (b) { return b.JenisKelamin === 'Putra'; }) || null;
+  const barungPutri = barungSekolah.find(function (b) { return b.JenisKelamin === 'Putri'; }) || null;
+
+  let maxPoints = 2; // existensi 2 barung
+  let earnedPoints = 0;
+
+  if (barungPutra) earnedPoints += 1;
+  if (barungPutri) earnedPoints += 1;
+
+  [barungPutra, barungPutri].forEach(function (barung) {
+
+    maxPoints += 26; // 2 (pendamping) + 24 (8 peserta x 3 syarat)
+
+    if (!barung) return; // barung belum dibuat -> semua poin di bawahnya 0
+
+    const pendampingBarung = pendampingList
+      .filter(function (p) { return String(p.BarungID) === String(barung.ID); })
+      .slice(0, 2);
+
+    pendampingBarung.forEach(function (p) {
+      earnedPoints += 0.5; // ada datanya
+      if (p.FotoURL) earnedPoints += 0.5; // ada fotonya
+    });
+
+    const pesertaBarung = pesertaList
+      .filter(function (p) { return String(p.BarungID) === String(barung.ID); })
+      .slice(0, 8);
+
+    pesertaBarung.forEach(function (p) {
+      earnedPoints += 1; // datanya ada
+      if (p.FotoURL) earnedPoints += 1; // foto ada
+      const adaDokumen = documentsList.some(function (d) { return String(d.PesertaID) === String(p.ID); });
+      if (adaDokumen) earnedPoints += 1; // KK/Akta sudah diupload
+    });
+  });
+
+  return Math.round((earnedPoints / maxPoints) * 100);
+}
+
+function renderProgressSekolah(sekolahList, barungList, pesertaList, pendampingList, documentsList) {
 
   const el = document.getElementById('progressList');
 
@@ -284,17 +337,10 @@ function renderProgressSekolah(sekolahList, barungList, pesertaList, pendampingL
   }
 
   const rows = sekolahList.map(function (s) {
-
-    let score = 0;
-
-    if (s.StatusKelengkapan === 'Lengkap') score += 25;
-    if (barungList.some(function (b) { return String(b.SekolahID) === String(s.ID); })) score += 25;
-    if (pesertaList.some(function (p) { return String(p.SekolahID) === String(s.ID); })) score += 25;
-
-    const pendampingSekolah = pendampingList.filter(function (p) { return String(p.SekolahID) === String(s.ID); });
-    if (pendampingSekolah.length >= 3) score += 25;
-
-    return { nama: s.NamaSekolah, score: score };
+    return {
+      nama: s.NamaSekolah,
+      score: hitungProgressSekolah(s, barungList, pendampingList, pesertaList, documentsList || [])
+    };
   }).sort(function (a, b) { return b.score - a.score; });
 
   el.innerHTML = rows.map(function (r) {
