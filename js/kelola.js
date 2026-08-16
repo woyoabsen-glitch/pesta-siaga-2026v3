@@ -285,7 +285,7 @@ function renderPendampingGroup(barung) {
 
     return (
       '<div class="pendamping-card">' +
-        (p && p.FotoURL ? '<img src="' + escapeHtml(p.FotoURL) + '" style="width:56px;height:56px;border-radius:50%;object-fit:cover;margin-bottom:8px">' : '') +
+        (p && p.FotoURL ? '<img src="' + escapeHtml(p.FotoURL) + '" style="width:100%;aspect-ratio:1;border-radius:10px;object-fit:cover;margin-bottom:8px">' : '') +
         '<div class="role-tag">' + peran.replace('Pendamping', 'Pendamping ') + '</div>' +
         (p
           ? ('<div class="name">' + escapeHtml(p.Nama) + '</div><div class="phone">' + escapeHtml(p.NomorHP || '-') + '</div>' +
@@ -450,7 +450,7 @@ function renderRosterBarung(barung) {
         return (
           '<div class="action-item">' +
             '<div style="display:flex;align-items:center;gap:10px">' +
-              (p.FotoURL ? '<img src="' + escapeHtml(p.FotoURL) + '" style="width:32px;height:32px;border-radius:50%;object-fit:cover">' : '<span style="width:32px;height:32px;border-radius:50%;background:var(--line);display:inline-block"></span>') +
+              (p.FotoURL ? '<img src="' + escapeHtml(p.FotoURL) + '" style="width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0">' : '<span style="width:48px;height:48px;border-radius:8px;background:var(--line);display:inline-block;flex-shrink:0"></span>') +
               '<div><div class="who">' + escapeHtml(p.Nama) + '</div><div class="meta">' + p.Peran.replace('Pendamping', 'Pendamping ') + '</div></div>' +
             '</div>' +
             '<span class="badge" style="background:var(--teal-100);color:var(--teal-700)">Pendamping</span>' +
@@ -462,15 +462,15 @@ function renderRosterBarung(barung) {
     ? '<div class="empty-note">Belum ada peserta di barung ini.</div>'
     : pesertaBarung.map(function (p) {
         return (
-          '<div class="action-item">' +
+          '<div class="action-item" style="align-items:flex-start;flex-wrap:wrap;gap:8px">' +
             '<div style="display:flex;align-items:center;gap:10px">' +
-              (p.FotoURL ? '<img src="' + escapeHtml(p.FotoURL) + '" style="width:32px;height:32px;border-radius:50%;object-fit:cover;cursor:pointer" onclick="openUploadFoto(\'' + p.ID + '\')">' : '<button class="btn-secondary btn-sm" style="padding:4px 7px" onclick="openUploadFoto(\'' + p.ID + '\')">📷</button>') +
+              (p.FotoURL ? '<img src="' + escapeHtml(p.FotoURL) + '" style="width:48px;height:48px;border-radius:8px;object-fit:cover;cursor:pointer;flex-shrink:0" onclick="openUploadFoto(\'' + p.ID + '\')">' : '<button class="btn-secondary btn-sm" style="width:48px;height:48px;border-radius:8px;flex-shrink:0;padding:0" onclick="openUploadFoto(\'' + p.ID + '\')">📷</button>') +
               '<div><div class="who">' + escapeHtml(p.NamaLengkap) + '</div><div class="meta">' + formatTanggalPendek(p.TanggalLahir) + ' · ' + p.UsiaTahun + ' th ' + p.UsiaBulan + ' bl</div></div>' +
             '</div>' +
-            '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">' +
+            '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-left:auto">' +
               '<span class="badge" style="background:var(--forest-800)11;color:var(--forest-800)">' + (JABATAN_LABEL[p.Jabatan] || 'Anggota') + '</span>' +
               '<span class="pill" style="background:' + STATUS_COLOR[p.StatusVerifikasi] + '22;color:' + STATUS_COLOR[p.StatusVerifikasi] + '">' + STATUS_LABEL[p.StatusVerifikasi] + '</span>' +
-              '<button class="btn-secondary btn-sm" onclick="openUploadDokumen(\'' + p.ID + '\')">📄</button>' +
+              '<button class="btn-secondary btn-sm" onclick="openUploadDokumen(\'' + p.ID + '\')" title="Upload KK / Akta Kelahiran untuk verifikasi OCR">📄 Dokumen KK/Akta</button>' +
               '<button class="btn-secondary btn-sm" onclick="openPesertaForm(\'' + p.ID + '\')">Edit</button>' +
               '<button class="btn-secondary btn-sm btn-danger-outline" onclick="onDeletePeserta(\'' + p.ID + '\')">Hapus</button>' +
             '</div>' +
