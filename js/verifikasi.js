@@ -1,4 +1,6 @@
 let ALL_PESERTA = [];
+let SEKOLAH_MAP = {};
+let BARUNG_MAP = {};
 let ACTIVE_FILTER = 'ALL';
 
 const FILTER_OPTIONS = [
@@ -69,7 +71,20 @@ async function loadPeserta() {
 
   try {
 
-    ALL_PESERTA = await callApi('getPesertaList', [{}]);
+    const [peserta, sekolahList, barungList] = await Promise.all([
+      callApi('getPesertaList', [{}]),
+      callApi('getSekolahList', []),
+      callApi('getBarungList', [null])
+    ]);
+
+    ALL_PESERTA = peserta;
+
+    SEKOLAH_MAP = {};
+    sekolahList.forEach(function (s) { SEKOLAH_MAP[s.ID] = s.NamaSekolah; });
+
+    BARUNG_MAP = {};
+    barungList.forEach(function (b) { BARUNG_MAP[b.ID] = (b.JenisKelamin ? b.JenisKelamin + ' — ' : '') + b.NamaBarung; });
+
     document.getElementById('pageSub').textContent = ALL_PESERTA.length + ' peserta terdaftar dari seluruh sekolah.';
     renderTable();
 
@@ -99,7 +114,7 @@ function renderTable() {
       return (
         '<tr>' +
           '<td><b>' + escapeHtml(p.NamaLengkap) + '</b></td>' +
-          '<td>' + escapeHtml(p.SekolahID) + ' / ' + escapeHtml(p.BarungID) + '</td>' +
+          '<td>' + escapeHtml(SEKOLAH_MAP[p.SekolahID] || p.SekolahID) + '<br><span style="font-size:11px;color:var(--ink-400)">' + escapeHtml(BARUNG_MAP[p.BarungID] || p.BarungID) + '</span></td>' +
           '<td>' + p.UsiaTahun + ' th ' + p.UsiaBulan + ' bl</td>' +
           '<td><span class="pill" style="background:' + STATUS_COLOR[p.StatusVerifikasi] + '22;color:' + STATUS_COLOR[p.StatusVerifikasi] + '">' + STATUS_LABEL[p.StatusVerifikasi] + '</span></td>' +
           '<td style="max-width:220px;font-size:11.5px;color:var(--ink-600)">' + escapeHtml((p.CatatanVerifikasi || '-').substring(0, 90)) + '</td>' +
