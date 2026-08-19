@@ -27,6 +27,16 @@
   document.getElementById('formEvent').addEventListener('submit', onSaveEvent);
   document.getElementById('formSettings').addEventListener('submit', onSaveSettings);
 
+  const btnRecalc = document.getElementById('btnRecalcUsia');
+  if (btnRecalc) {
+    if (!boleeditEvent) {
+      btnRecalc.disabled = true;
+      btnRecalc.title = 'Anda tidak memiliki izin untuk aksi ini.';
+    } else {
+      btnRecalc.addEventListener('click', onRecalcUsia);
+    }
+  }
+
   document.getElementById('pageSub').textContent = 'Kelola informasi kegiatan dan identitas aplikasi.';
 
   await Promise.all([loadEvent(), loadSettings()]);
@@ -70,6 +80,7 @@ async function loadEvent() {
     document.getElementById('eLokasi').value = event.Lokasi || '';
     document.getElementById('eUsiaMin').value = event.UsiaMinTahun || 7;
     document.getElementById('eUsiaMaks').value = event.UsiaMaksTahun || 11;
+    document.getElementById('eTanggalCutoff').value = new Date(event.TanggalCutoffUsia || event.Tanggal).toISOString().substring(0, 10);
 
   } catch (e) {
     toast(e.message, true);
@@ -88,7 +99,8 @@ async function onSaveEvent(e) {
       Status: document.getElementById('eStatus').value,
       Lokasi: document.getElementById('eLokasi').value.trim(),
       UsiaMinTahun: Number(document.getElementById('eUsiaMin').value),
-      UsiaMaksTahun: Number(document.getElementById('eUsiaMaks').value)
+      UsiaMaksTahun: Number(document.getElementById('eUsiaMaks').value),
+      TanggalCutoffUsia: document.getElementById('eTanggalCutoff').value
     }]);
 
     toast('Informasi kegiatan tersimpan.');
@@ -129,5 +141,47 @@ async function onSaveSettings(e) {
 
   } catch (err) {
     toast(err.message, true);
+  }
+}
+
+async function onRecalcUsia() {
+
+  const ok = confirm(
+    'Ini akan menghitung ulang usia & status kelayakan SEMUA peserta yang sudah diinput, ' +
+    'berdasarkan Tanggal Cutoff Usia yang tersimpan saat ini.\n\n' +
+    'Pastikan Anda sudah klik "Simpan Info Kegiatan" dulu kalau baru mengubah tanggal cutoff. Lanjutkan?'
+  );
+
+  if (!ok) return;
+
+  const btn = document.getElementById('btnRecalcUsia');
+  const resultEl = document.getElementById('recalcResult');
+
+  btn.disabled = true;
+  btn.textContent = '⏳ Memproses…';
+  resultEl.innerHTML = '';
+
+  try {
+
+    const hasil = await callApi('recalcUsiaSemuaPeserta', []);
+
+    resultEl.innerHTML =
+      '<div class="usia-preview ok">' +
+        '✅ Selesai. ' + hasil.totalDiperiksa + ' peserta diperiksa.<br>' +
+        (hasil.jadiTidakMemenuhi > 0 ? hasil.jadiTidakMemenuhi + ' peserta jadi <b>Tidak Memenuhi Syarat</b> (terkunci otomatis).<br>' : '') +
+        (hasil.jadiMemenuhiLagi > 0 ? hasil.jadiMemenuhiLagi + ' peserta yang tadinya terkunci kini <b>memenuhi syarat lagi</b> (kembali ke status Menunggu Dokumen).<br>' : '') +
+        (hasil.jadiTidakMemenuhi === 0 && hasil.jadiMemenuhiLagi === 0 ? 'Tidak ada perubahan status.' : '') +
+      '</div>';
+
+    toast('Hitung ulang usia selesai.');
+
+  } catch (err) {
+
+    resultEl.innerHTML = '<div class="usia-preview bad">Gagal: ' + err.message + '</div>';
+
+  } finally {
+
+    btn.disabled = false;
+    btn.textContent = '🔄 Hitung Ulang Usia Semua Peserta';
   }
 }
