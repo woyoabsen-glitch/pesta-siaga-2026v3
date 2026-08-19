@@ -351,6 +351,144 @@ function openPendampingForm(barungId, peran, id, namaEnc, hpEnc, bioEnc) {
   });
 }
 
+/* =========================================================
+ *  CROPPER FOTO — user pilih sendiri area yang ditampilkan,
+ *  bukan otomatis kesetting dari foto aslinya.
+ * ========================================================= */
+
+function openFotoCropper(file) {
+
+  return new Promise(function (resolve) {
+
+    const reader = new FileReader();
+
+    reader.onload = function () {
+
+      const dataUrl = reader.result;
+      const img = new Image();
+
+      img.onload = function () {
+        renderCropperModal(img, dataUrl, resolve);
+      };
+
+      img.src = dataUrl;
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderCropperModal(imgNatural, dataUrl, resolve) {
+
+  const FRAME = 280;
+  const OUTPUT = 600;
+
+  let zoom = 1;
+  let panX = 0;
+  let panY = 0;
+
+  const naturalW = imgNatural.naturalWidth;
+  const naturalH = imgNatural.naturalHeight;
+  const baseScale = Math.max(FRAME / naturalW, FRAME / naturalH);
+
+  openModal('Sesuaikan Foto', (
+    '<div class="cropper-hint">Geser foto untuk memindahkan posisi, gunakan slider untuk memperbesar area yang ingin ditonjolkan. Area di dalam kotak yang akan tersimpan.</div>' +
+    '<div class="cropper-frame" id="cropperFrame"><img id="cropperImg" src="' + dataUrl + '" alt=""></div>' +
+    '<div class="cropper-controls"><span>🔍−</span><input type="range" id="cropperZoom" min="1" max="3" step="0.01" value="1"><span>🔍+</span></div>' +
+    '<div class="modal-actions">' +
+      '<button type="button" class="btn-secondary" id="cropperCancel">Batal</button>' +
+      '<button type="button" class="btn-primary" id="cropperConfirm" style="width:auto;padding:10px 22px">✅ Gunakan Foto Ini</button>' +
+    '</div>'
+  ));
+
+  const frame = document.getElementById('cropperFrame');
+  const imageEl = document.getElementById('cropperImg');
+  const zoomSlider = document.getElementById('cropperZoom');
+
+  function applyTransform() {
+
+    const dispW = naturalW * baseScale * zoom;
+    const dispH = naturalH * baseScale * zoom;
+
+    imageEl.style.width = dispW + 'px';
+    imageEl.style.height = dispH + 'px';
+    imageEl.style.transform = 'translate(-50%, -50%) translate(' + panX + 'px, ' + panY + 'px)';
+  }
+
+  function clampPan() {
+
+    const dispW = naturalW * baseScale * zoom;
+    const dispH = naturalH * baseScale * zoom;
+
+    const maxX = Math.max(0, (dispW - FRAME) / 2);
+    const maxY = Math.max(0, (dispH - FRAME) / 2);
+
+    panX = Math.max(-maxX, Math.min(maxX, panX));
+    panY = Math.max(-maxY, Math.min(maxY, panY));
+  }
+
+  applyTransform();
+
+  let dragging = false;
+  let startX = 0, startY = 0, startPanX = 0, startPanY = 0;
+
+  frame.addEventListener('pointerdown', function (e) {
+    dragging = true;
+    startX = e.clientX; startY = e.clientY;
+    startPanX = panX; startPanY = panY;
+    frame.setPointerCapture(e.pointerId);
+  });
+
+  frame.addEventListener('pointermove', function (e) {
+    if (!dragging) return;
+    panX = startPanX + (e.clientX - startX);
+    panY = startPanY + (e.clientY - startY);
+    clampPan();
+    applyTransform();
+  });
+
+  frame.addEventListener('pointerup', function () { dragging = false; });
+  frame.addEventListener('pointercancel', function () { dragging = false; });
+
+  zoomSlider.addEventListener('input', function () {
+    zoom = parseFloat(zoomSlider.value);
+    clampPan();
+    applyTransform();
+  });
+
+  document.getElementById('cropperCancel').addEventListener('click', function () {
+    closeModal();
+    resolve(null);
+  });
+
+  document.getElementById('cropperConfirm').addEventListener('click', function () {
+
+    const dispScale = baseScale * zoom;
+    const dispW = naturalW * dispScale;
+    const dispH = naturalH * dispScale;
+
+    let srcLeft = ((dispW - FRAME) / 2 - panX) / dispScale;
+    let srcTop = ((dispH - FRAME) / 2 - panY) / dispScale;
+    let srcSize = FRAME / dispScale;
+
+    // Jaga-jaga pembulatan supaya tidak keluar batas gambar asli.
+    srcLeft = Math.max(0, Math.min(naturalW - srcSize, srcLeft));
+    srcTop = Math.max(0, Math.min(naturalH - srcSize, srcTop));
+
+    const canvas = document.createElement('canvas');
+    canvas.width = OUTPUT;
+    canvas.height = OUTPUT;
+
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(imageEl, srcLeft, srcTop, srcSize, srcSize, 0, 0, OUTPUT, OUTPUT);
+
+    const outputBase64 = canvas.toDataURL('image/jpeg', 0.92).split(',')[1];
+
+    closeModal();
+    resolve(outputBase64);
+  });
+}
+
 function openUploadFotoPendamping(pendampingId) {
 
   openModal('Upload Foto Pendamping', (
@@ -372,17 +510,23 @@ function openUploadFotoPendamping(pendampingId) {
     const file = fileInput.files[0];
     if (!file) return;
 
+    const cropped = await openFotoCropper(file);
+
+    if (!cropped) {
+      // Pengguna membatalkan crop -> buka lagi modal upload supaya bisa pilih ulang.
+      openUploadFotoPendamping(pendampingId);
+      return;
+    }
+
     statusEl.innerHTML = '<div class="loading-note">Mengunggah foto…</div>';
 
     try {
 
-      const base64 = await fileToBase64(file);
-
       await callApi('uploadFotoPendamping', [{
         PendampingID: pendampingId,
-        base64Data: base64,
-        mimeType: file.type,
-        filename: file.name
+        base64Data: cropped,
+        mimeType: 'image/jpeg',
+        filename: 'pendamping_' + pendampingId + '.jpg'
       }]);
 
       statusEl.innerHTML = '<div class="usia-preview ok">✅ Foto berhasil diunggah.</div>';
@@ -610,17 +754,22 @@ function openUploadFoto(pesertaId) {
     const file = fileInput.files[0];
     if (!file) return;
 
+    const cropped = await openFotoCropper(file);
+
+    if (!cropped) {
+      openUploadFoto(pesertaId);
+      return;
+    }
+
     statusEl.innerHTML = '<div class="loading-note">Mengunggah foto…</div>';
 
     try {
 
-      const base64 = await fileToBase64(file);
-
       await callApi('uploadFotoPeserta', [{
         PesertaID: pesertaId,
-        base64Data: base64,
-        mimeType: file.type,
-        filename: file.name
+        base64Data: cropped,
+        mimeType: 'image/jpeg',
+        filename: 'peserta_' + pesertaId + '.jpg'
       }]);
 
       statusEl.innerHTML = '<div class="usia-preview ok">✅ Foto berhasil diunggah.</div>';
