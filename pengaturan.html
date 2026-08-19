@@ -74,20 +74,35 @@
         <div class="panel-sub">Tanggal &amp; aturan usia — hanya Penanggung Jawab &amp; Ketua</div>
         <form id="formEvent" class="form-grid">
           <div class="field-full"><label>Nama Kegiatan</label><input id="eNama" required></div>
-          <div><label>Tanggal Kegiatan</label><input id="eTanggal" type="date" required></div>
+          <div><label>Tanggal Kegiatan (Hari H)</label><input id="eTanggal" type="date" required></div>
           <div><label>Status</label>
             <select id="eStatus"><option value="Aktif">Aktif</option><option value="Selesai">Selesai</option></select>
           </div>
           <div class="field-full"><label>Lokasi</label><input id="eLokasi" required></div>
           <div><label>Usia Minimum (tahun)</label><input id="eUsiaMin" type="number" min="1" required></div>
-          <div><label>Usia Maksimum (tahun, eksklusif)</label><input id="eUsiaMaks" type="number" min="1" required></div>
+          <div><label>Usia Maksimum (tahun, tidak boleh lebih dari ini)</label><input id="eUsiaMaks" type="number" min="1" required></div>
+          <div class="field-full">
+            <label>Tanggal Cutoff Usia</label>
+            <input id="eTanggalCutoff" type="date" required>
+            <div style="font-size:11.5px;color:var(--ink-600);margin-top:4px">
+              Usia peserta dihitung PADA TANGGAL INI — boleh beda dari Tanggal Kegiatan. Contoh: cutoff 1 Agustus 2026 berarti pada tanggal itu peserta harus usia 7–10 tahun; lebih dari 10 tahun pada tanggal cutoff otomatis tidak memenuhi syarat, walau kegiatannya sendiri baru 27 Agustus.
+            </div>
+          </div>
           <div class="field-full"><button type="submit" class="btn-primary" style="width:auto;padding:11px 22px">Simpan Info Kegiatan</button></div>
         </form>
+
+        <div style="margin-top:20px;padding-top:18px;border-top:1.5px solid var(--line)">
+          <div style="font-size:13px;font-weight:600;margin-bottom:4px">Data peserta yang sudah terlanjur diinput?</div>
+          <div style="font-size:12px;color:var(--ink-600);margin-bottom:10px">Kalau baru mengubah tanggal cutoff di atas, klik ini supaya usia &amp; status semua peserta yang sudah ada dihitung ulang sesuai aturan terbaru.</div>
+          <button id="btnRecalcUsia" class="btn-secondary">🔄 Hitung Ulang Usia Semua Peserta</button>
+          <div id="recalcResult" style="margin-top:12px"></div>
+        </div>
       </div>
 
       <div class="panel">
         <h3>Identitas Aplikasi</h3>
         <div class="panel-sub">Nama, penyelenggara, tagline — hanya Penanggung Jawab</div>
+
         <form id="formSettings" class="form-grid single">
           <div><label>Nama Aplikasi</label><input id="sNama" required></div>
           <div><label>Penyelenggara</label><input id="sPenyelenggara" required></div>
