@@ -365,11 +365,15 @@ function renderEventInfo(event, summary) {
   const tanggal = new Date(event.Tanggal);
   const tglText = isNaN(tanggal) ? event.Tanggal : tanggal.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 
+  const tanggalCutoff = event.TanggalCutoffUsia ? new Date(event.TanggalCutoffUsia) : tanggal;
+  const cutoffText = isNaN(tanggalCutoff) ? '-' : tanggalCutoff.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
   const rows = [
     ['Kegiatan', event.NamaEvent],
-    ['Tanggal', tglText],
+    ['Tanggal Kegiatan', tglText],
     ['Lokasi', event.Lokasi],
-    ['Rentang Usia', event.UsiaMinTahun + ' – < ' + event.UsiaMaksTahun + ' tahun'],
+    ['Rentang Usia', event.UsiaMinTahun + ' – ' + (event.UsiaMaksTahun - 1) + ' tahun'],
+    ['Usia Dihitung Per', cutoffText],
     ['Status', event.Status]
   ];
 
