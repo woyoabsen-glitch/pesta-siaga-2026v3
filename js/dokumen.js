@@ -266,15 +266,17 @@ function renderBarungBlock(barung) {
         );
       }).join('');
 
+  const headStyle = 'background:' + hex + ';color:' + textColor + ';';
+
   return (
     '<div class="barung-block">' +
-      '<div class="bb-head" style="background:' + hex + ';color:' + textColor + '">' +
+      '<div class="bb-head" style="' + headStyle + '">' +
         'Barung ' + escapeHtml(barung.JenisKelamin || '') + ' — ' + escapeHtml(barung.NamaBarung || '') +
       '</div>' +
       '<div class="group-label">Pendamping</div>' +
-      '<table><thead><tr><th>Foto</th><th>Nama</th><th>Peran</th><th>No. HP</th><th>Biodata</th></tr></thead><tbody>' + pendampingRows + '</tbody></table>' +
+      '<table><thead><tr style="' + headStyle + '"><th>Foto</th><th>Nama</th><th>Peran</th><th>No. HP</th><th>Biodata</th></tr></thead><tbody>' + pendampingRows + '</tbody></table>' +
       '<div class="group-label">Peserta</div>' +
-      '<table><thead><tr><th>Foto</th><th>Nama</th><th>Tempat, Tgl Lahir</th><th>Usia</th><th>Jabatan</th><th>Status</th></tr></thead><tbody>' + pesertaRows + '</tbody></table>' +
+      '<table><thead><tr style="' + headStyle + '"><th>Foto</th><th>Nama</th><th>Tempat, Tgl Lahir</th><th>Usia</th><th>Jabatan</th><th>Status</th></tr></thead><tbody>' + pesertaRows + '</tbody></table>' +
     '</div>'
   );
 }
