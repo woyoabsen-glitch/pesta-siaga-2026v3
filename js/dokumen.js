@@ -122,6 +122,81 @@ function renderReport(sekolahIds) {
   }).join('');
 
   root.innerHTML = cover + sections;
+
+  renderLampiranJikaAktif(sekolahIds);
+}
+
+async function renderLampiranJikaAktif(sekolahIds) {
+
+  const chk = document.getElementById('chkLampiran');
+  if (!chk || !chk.checked) return;
+
+  const pesertaTerkait = DOK_ALL.peserta.filter(function (p) {
+    return sekolahIds.indexOf(p.SekolahID) > -1;
+  });
+
+  if (pesertaTerkait.length === 0) return;
+
+  const root = document.getElementById('reportRoot');
+  const printBtn = document.getElementById('printBtn');
+
+  const loadingEl = document.createElement('div');
+  loadingEl.className = 'no-print loading-note';
+  loadingEl.id = 'lampiranLoading';
+  root.appendChild(loadingEl);
+
+  if (printBtn) printBtn.disabled = true;
+
+  const items = [];
+  let selesai = 0;
+
+  for (const p of pesertaTerkait) {
+
+    loadingEl.textContent = 'Memuat lampiran dokumen… (' + (++selesai) + ' / ' + pesertaTerkait.length + ' peserta diperiksa)';
+
+    try {
+
+      const docs = await callApi('getDocumentsByPeserta', [p.ID]);
+
+      for (const d of docs) {
+        try {
+          const full = await callApi('getDokumenBase64', [d.ID]);
+          items.push({ peserta: p, doc: d, full: full });
+        } catch (e) { /* satu dokumen gagal diambil -> lewati, jangan hentikan semuanya */ }
+      }
+
+    } catch (e) { /* peserta ini gagal diperiksa -> lewati */ }
+  }
+
+  loadingEl.remove();
+  if (printBtn) printBtn.disabled = false;
+
+  if (items.length === 0) return;
+
+  const sekolahMap = {};
+  DOK_ALL.sekolah.forEach(function (s) { sekolahMap[s.ID] = s.NamaSekolah; });
+
+  const html =
+    '<div class="lampiran-block report-page">' +
+      '<h2>Lampiran Dokumen KK / Akta Kelahiran</h2>' +
+      items.map(function (it) {
+
+        const isPdf = (it.full.mimeType || '').indexOf('pdf') > -1;
+
+        return (
+          '<div class="lampiran-item">' +
+            '<div class="li-head">' + escapeHtml(it.peserta.NamaLengkap) + ' — ' + escapeHtml(it.doc.JenisDokumen) + '</div>' +
+            '<div class="li-sub">' + escapeHtml(sekolahMap[it.peserta.SekolahID] || '-') + '</div>' +
+            (isPdf
+              ? '<div class="li-nodoc">Dokumen berupa file PDF — tidak ditampilkan langsung di lampiran ini. Buka lewat menu Verifikasi Data untuk melihat isinya.</div>'
+              : '<img src="data:' + it.full.mimeType + ';base64,' + it.full.base64 + '" alt="">'
+            ) +
+          '</div>'
+        );
+      }).join('') +
+    '</div>';
+
+  root.insertAdjacentHTML('beforeend', html);
 }
 
 function renderSekolahSection(sekolah, isLast) {
@@ -166,11 +241,11 @@ function renderBarungBlock(barung) {
     : pendampingBarung.map(function (p) {
         return (
           '<tr>' +
-            '<td>' + (p.FotoURL ? '<img class="doc-photo" src="' + escapeHtml(p.FotoURL) + '">' : '<span class="doc-photo-empty"></span>') + '</td>' +
-            '<td><b>' + escapeHtml(p.Nama) + '</b></td>' +
-            '<td>' + escapeHtml((p.Peran || '').replace('Pendamping', 'Pendamping ').replace('KetuaBarung', 'Ketua Barung')) + '</td>' +
-            '<td>' + escapeHtml(p.NomorHP || '-') + '</td>' +
-            '<td>' + escapeHtml(p.Biodata || '-') + '</td>' +
+            '<td class="col-info">' + (p.FotoURL ? '<img class="doc-photo" src="' + escapeHtml(p.FotoURL) + '">' : '<span class="doc-photo-empty"></span>') + '</td>' +
+            '<td class="col-nama">' + escapeHtml(p.Nama) + '</td>' +
+            '<td class="col-info">' + escapeHtml((p.Peran || '').replace('Pendamping', 'Pendamping ').replace('KetuaBarung', 'Ketua Barung')) + '</td>' +
+            '<td class="col-info">' + escapeHtml(p.NomorHP || '-') + '</td>' +
+            '<td class="col-info">' + escapeHtml(p.Biodata || '-') + '</td>' +
           '</tr>'
         );
       }).join('');
@@ -181,12 +256,12 @@ function renderBarungBlock(barung) {
         const jabatanText = { Pinrung: 'Pinrung', Wapinrung: 'Wapinrung', Anggota: 'Anggota' }[p.Jabatan] || 'Anggota';
         return (
           '<tr>' +
-            '<td>' + (p.FotoURL ? '<img class="doc-photo" src="' + escapeHtml(p.FotoURL) + '">' : '<span class="doc-photo-empty"></span>') + '</td>' +
-            '<td><b>' + escapeHtml(p.NamaLengkap) + '</b></td>' +
-            '<td>' + escapeHtml(p.TempatLahir || '-') + ', ' + formatTanggalPendek(p.TanggalLahir) + '</td>' +
-            '<td>' + (p.UsiaTahun != null ? (p.UsiaTahun + ' th ' + p.UsiaBulan + ' bl') : '-') + '</td>' +
-            '<td>' + jabatanText + '</td>' +
-            '<td>' + (STATUS_LABEL[p.StatusVerifikasi] || p.StatusVerifikasi) + '</td>' +
+            '<td class="col-info">' + (p.FotoURL ? '<img class="doc-photo" src="' + escapeHtml(p.FotoURL) + '">' : '<span class="doc-photo-empty"></span>') + '</td>' +
+            '<td class="col-nama">' + escapeHtml(p.NamaLengkap) + '</td>' +
+            '<td class="col-info">' + escapeHtml(p.TempatLahir || '-') + ', ' + formatTanggalPendek(p.TanggalLahir) + '</td>' +
+            '<td class="col-info">' + (p.UsiaTahun != null ? (p.UsiaTahun + ' th ' + p.UsiaBulan + ' bl') : '-') + '</td>' +
+            '<td class="col-info">' + jabatanText + '</td>' +
+            '<td class="col-info">' + (STATUS_LABEL[p.StatusVerifikasi] || p.StatusVerifikasi) + '</td>' +
           '</tr>'
         );
       }).join('');
