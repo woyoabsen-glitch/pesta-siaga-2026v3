@@ -380,8 +380,10 @@ function openFotoCropper(file) {
 
 function renderCropperModal(imgNatural, dataUrl, resolve) {
 
-  const FRAME = 280;
-  const OUTPUT = 600;
+  const FRAME_W = 225; // rasio 3:4 (potret formal, seperti pas foto)
+  const FRAME_H = 300;
+  const OUTPUT_W = 450;
+  const OUTPUT_H = 600;
 
   let zoom = 1;
   let panX = 0;
@@ -389,11 +391,11 @@ function renderCropperModal(imgNatural, dataUrl, resolve) {
 
   const naturalW = imgNatural.naturalWidth;
   const naturalH = imgNatural.naturalHeight;
-  const baseScale = Math.max(FRAME / naturalW, FRAME / naturalH);
+  const baseScale = Math.max(FRAME_W / naturalW, FRAME_H / naturalH);
 
   openModal('Sesuaikan Foto', (
-    '<div class="cropper-hint">Geser foto untuk memindahkan posisi, gunakan slider untuk memperbesar area yang ingin ditonjolkan. Area di dalam kotak yang akan tersimpan.</div>' +
-    '<div class="cropper-frame" id="cropperFrame"><img id="cropperImg" src="' + dataUrl + '" alt=""></div>' +
+    '<div class="cropper-hint">Geser foto untuk memindahkan posisi, gunakan slider untuk memperbesar area yang ingin ditonjolkan. Area di dalam kotak (rasio 3x4, seperti pas foto) yang akan tersimpan.</div>' +
+    '<div class="cropper-frame" id="cropperFrame" style="width:' + FRAME_W + 'px;height:' + FRAME_H + 'px"><img id="cropperImg" src="' + dataUrl + '" alt=""></div>' +
     '<div class="cropper-controls"><span>🔍−</span><input type="range" id="cropperZoom" min="1" max="3" step="0.01" value="1"><span>🔍+</span></div>' +
     '<div class="modal-actions">' +
       '<button type="button" class="btn-secondary" id="cropperCancel">Batal</button>' +
@@ -420,8 +422,8 @@ function renderCropperModal(imgNatural, dataUrl, resolve) {
     const dispW = naturalW * baseScale * zoom;
     const dispH = naturalH * baseScale * zoom;
 
-    const maxX = Math.max(0, (dispW - FRAME) / 2);
-    const maxY = Math.max(0, (dispH - FRAME) / 2);
+    const maxX = Math.max(0, (dispW - FRAME_W) / 2);
+    const maxY = Math.max(0, (dispH - FRAME_H) / 2);
 
     panX = Math.max(-maxX, Math.min(maxX, panX));
     panY = Math.max(-maxY, Math.min(maxY, panY));
@@ -467,20 +469,21 @@ function renderCropperModal(imgNatural, dataUrl, resolve) {
     const dispW = naturalW * dispScale;
     const dispH = naturalH * dispScale;
 
-    let srcLeft = ((dispW - FRAME) / 2 - panX) / dispScale;
-    let srcTop = ((dispH - FRAME) / 2 - panY) / dispScale;
-    let srcSize = FRAME / dispScale;
+    let srcLeft = ((dispW - FRAME_W) / 2 - panX) / dispScale;
+    let srcTop = ((dispH - FRAME_H) / 2 - panY) / dispScale;
+    let srcW = FRAME_W / dispScale;
+    let srcH = FRAME_H / dispScale;
 
     // Jaga-jaga pembulatan supaya tidak keluar batas gambar asli.
-    srcLeft = Math.max(0, Math.min(naturalW - srcSize, srcLeft));
-    srcTop = Math.max(0, Math.min(naturalH - srcSize, srcTop));
+    srcLeft = Math.max(0, Math.min(naturalW - srcW, srcLeft));
+    srcTop = Math.max(0, Math.min(naturalH - srcH, srcTop));
 
     const canvas = document.createElement('canvas');
-    canvas.width = OUTPUT;
-    canvas.height = OUTPUT;
+    canvas.width = OUTPUT_W;
+    canvas.height = OUTPUT_H;
 
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(imageEl, srcLeft, srcTop, srcSize, srcSize, 0, 0, OUTPUT, OUTPUT);
+    ctx.drawImage(imageEl, srcLeft, srcTop, srcW, srcH, 0, 0, OUTPUT_W, OUTPUT_H);
 
     const outputBase64 = canvas.toDataURL('image/jpeg', 0.92).split(',')[1];
 
@@ -678,8 +681,8 @@ function openPesertaForm(pesertaId, defaultBarungId) {
       const hasil = await callApi('cekKelayakanUsiaPreview', [tglInput.value]);
       const cls = hasil.eligible ? 'ok' : 'bad';
       const teks = hasil.eligible
-        ? ('✅ Usia ' + hasil.usia.tahun + ' tahun ' + hasil.usia.bulan + ' bulan pada hari kegiatan — memenuhi syarat.')
-        : ('⛔ Usia ' + hasil.usia.tahun + ' tahun ' + hasil.usia.bulan + ' bulan pada hari kegiatan — TIDAK memenuhi syarat (' + hasil.usiaMin + '–<' + hasil.usiaMaks + ' tahun).');
+        ? ('✅ Usia ' + hasil.usia.tahun + ' tahun ' + hasil.usia.bulan + ' bulan per ' + formatTanggalPendek(hasil.tanggalCutoffUsia) + ' — memenuhi syarat.')
+        : ('⛔ Usia ' + hasil.usia.tahun + ' tahun ' + hasil.usia.bulan + ' bulan per ' + formatTanggalPendek(hasil.tanggalCutoffUsia) + ' — TIDAK memenuhi syarat (maksimal ' + (hasil.usiaMaks - 1) + ' tahun).');
 
       previewEl.innerHTML = '<div class="usia-preview ' + cls + '">' + teks + '</div>';
 
