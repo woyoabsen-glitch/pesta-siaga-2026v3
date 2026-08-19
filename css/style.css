@@ -490,7 +490,7 @@ table.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
    ========================================================= */
 
 .cropper-frame {
-  width: 280px; height: 280px; max-width: 100%; border-radius: 10px;
+  width: 225px; height: 300px; max-width: 100%; border-radius: 10px;
   overflow: hidden; position: relative; margin: 0 auto; background: #0b1a17;
   touch-action: none; cursor: grab; border: 2px solid var(--teal-500);
 }
