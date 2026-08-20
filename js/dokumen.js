@@ -92,6 +92,11 @@ function renderReport(sekolahIds) {
     ? tanggal.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
     : '-';
 
+  const tanggalCutoff = event.TanggalCutoffUsia ? new Date(event.TanggalCutoffUsia) : tanggal;
+  const cutoffText = tanggalCutoff && !isNaN(tanggalCutoff)
+    ? tanggalCutoff.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
+    : '-';
+
   const sekolahTerpilih = DOK_ALL.sekolah.filter(function (s) {
     return sekolahIds.indexOf(s.ID) > -1;
   });
@@ -111,7 +116,8 @@ function renderReport(sekolahIds) {
         '<table>' +
           '<tr><td><b>Tanggal Kegiatan</b></td><td>: ' + tglText + '</td></tr>' +
           '<tr><td><b>Lokasi</b></td><td>: ' + escapeHtml(event.Lokasi || '-') + '</td></tr>' +
-          '<tr><td><b>Rentang Usia</b></td><td>: ' + (event.UsiaMinTahun || 7) + ' – &lt;' + (event.UsiaMaksTahun || 11) + ' tahun</td></tr>' +
+          '<tr><td><b>Rentang Usia Peserta</b></td><td>: ' + (event.UsiaMinTahun || 7) + ' – ' + ((event.UsiaMaksTahun || 11) - 1) + ' tahun</td></tr>' +
+          '<tr><td><b>Usia Dihitung Per Tanggal</b></td><td>: ' + cutoffText + '</td></tr>' +
         '</table>' +
         '<div class="cover-footer">Dicetak pada ' + new Date().toLocaleString('id-ID') + '<br>' + escapeHtml(settings.Developer || 'Edoy D Hagane') + ' — Pesta Siaga 2026 Digital Management System</div>' +
       '</div>' +
@@ -268,15 +274,21 @@ function renderBarungBlock(barung) {
 
   const headStyle = 'background:' + hex + ';color:' + textColor + ';';
 
+  const colgroupPendamping =
+    '<colgroup><col style="width:100px"><col style="width:170px"><col style="width:130px"><col style="width:130px"><col></colgroup>';
+
+  const colgroupPeserta =
+    '<colgroup><col style="width:100px"><col style="width:180px"><col style="width:150px"><col style="width:90px"><col style="width:90px"><col style="width:120px"></colgroup>';
+
   return (
     '<div class="barung-block">' +
       '<div class="bb-head" style="' + headStyle + '">' +
         'Barung ' + escapeHtml(barung.JenisKelamin || '') + ' — ' + escapeHtml(barung.NamaBarung || '') +
       '</div>' +
       '<div class="group-label">Pendamping</div>' +
-      '<table><thead><tr style="' + headStyle + '"><th>Foto</th><th>Nama</th><th>Peran</th><th>No. HP</th><th>Biodata</th></tr></thead><tbody>' + pendampingRows + '</tbody></table>' +
+      '<table>' + colgroupPendamping + '<thead><tr style="' + headStyle + '"><th>Foto</th><th>Nama</th><th>Peran</th><th>No. HP</th><th>Biodata</th></tr></thead><tbody>' + pendampingRows + '</tbody></table>' +
       '<div class="group-label">Peserta</div>' +
-      '<table><thead><tr style="' + headStyle + '"><th>Foto</th><th>Nama</th><th>Tempat, Tgl Lahir</th><th>Usia</th><th>Jabatan</th><th>Status</th></tr></thead><tbody>' + pesertaRows + '</tbody></table>' +
+      '<table>' + colgroupPeserta + '<thead><tr style="' + headStyle + '"><th>Foto</th><th>Nama</th><th>Tempat, Tgl Lahir</th><th>Usia</th><th>Jabatan</th><th>Status</th></tr></thead><tbody>' + pesertaRows + '</tbody></table>' +
     '</div>'
   );
 }
