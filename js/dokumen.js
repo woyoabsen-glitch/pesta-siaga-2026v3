@@ -275,10 +275,10 @@ function renderBarungBlock(barung) {
   const headStyle = 'background:' + hex + ';color:' + textColor + ';';
 
   const colgroupPendamping =
-    '<colgroup><col style="width:100px"><col style="width:170px"><col style="width:130px"><col style="width:130px"><col></colgroup>';
+    '<colgroup><col style="width:16%"><col style="width:21%"><col style="width:15%"><col style="width:15%"><col style="width:33%"></colgroup>';
 
   const colgroupPeserta =
-    '<colgroup><col style="width:100px"><col style="width:180px"><col style="width:150px"><col style="width:90px"><col style="width:90px"><col style="width:120px"></colgroup>';
+    '<colgroup><col style="width:15%"><col style="width:20%"><col style="width:18%"><col style="width:10%"><col style="width:13%"><col style="width:24%"></colgroup>';
 
   return (
     '<div class="barung-block">' +
